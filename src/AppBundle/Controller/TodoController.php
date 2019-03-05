@@ -166,4 +166,44 @@ class TodoController extends Controller
                 );
         return $this->redirectToRoute('todo_list');
     }
+    
+    /**
+     * @Route("/todo/sendmail", name="todo_sendmail")
+     */
+    public function sendMailAction(\Swift_Mailer $mailer)
+    {
+        $message = (new \Swift_Message('Hello Email'))
+                ->setFrom('hegde.prasanna132@gmail.com')
+                ->setTo('pgpro111@gmail.com');
+        
+        $mailer->send($message);
+   
+        $this->addFlash(
+                    'notice',
+                    'Mail sent'
+                );
+        return $this->redirectToRoute('todo_list');
+    }
+    
+    /**
+     * @Route("/todo/email/{email}", name="email_validate")
+     */
+    public function validateEmail($email)
+    {
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->addFlash(
+                    'notice',
+                    'valid'
+                );
+            return $this->redirectToRoute('todo_list');
+
+        } else {
+            $this->addFlash(
+                    'notice',
+                    'invalid'
+                );
+            return $this->redirectToRoute('todo_list');
+        }
+    }
+    
 }
